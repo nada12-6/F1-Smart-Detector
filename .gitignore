@@ -1,0 +1,17 @@
+# Données brutes Kaggle : à télécharger, non versionnées (voir README)
+data/raw/*
+!data/raw/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Éditeurs / système
+.vscode/
+.idea/
+.DS_Store
