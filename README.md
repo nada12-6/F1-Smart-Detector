@@ -70,9 +70,7 @@ Ordre de livraison : `races_clean` en premier (elle contient `race_order`, dont 
 
 | Document | Contenu |
 |---|---|
-| [`docs/CONTRAT_NETTOYAGE.md`](docs/CONTRAT_NETTOYAGE.md) | Règles du nettoyage (blocs 0 à 5) : la référence de toute décision |
 | [`docs/EDA_RACES_CIRCUITS.md`](docs/EDA_RACES_CIRCUITS.md) | EDA des tables `races` et `circuits` : constats et décisions |
-| [`docs/DOC_FINAL_NETTOYAGE_RACES_CIRCUITS.md`](docs/DOC_FINAL_NETTOYAGE_RACES_CIRCUITS.md) | Résultat du nettoyage : transformations, dictionnaire des colonnes, contrôles |
 
 ## Avancement
 
