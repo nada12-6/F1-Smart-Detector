@@ -72,14 +72,6 @@ Ordre de livraison : `races_clean` en premier (elle contient `race_order`, dont 
 |---|---|
 | [`docs/EDA_RACES_CIRCUITS.md`](docs/EDA_RACES_CIRCUITS.md) | EDA des tables `races` et `circuits` : constats et décisions |
 
-## Avancement
-
-| Table | Propriétaire | Statut |
-|---|---|---|
-| `races`, `circuits` | P4 | scripts écrits, en attente de relecture par P3 |
-| `results`, `status` | P1 | à renseigner |
-| `drivers`, `qualifying` | P2 | à renseigner |
-| `constructors` | P3 | à renseigner |
 
 ## Points à connaître
 
