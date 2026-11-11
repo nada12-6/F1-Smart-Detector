@@ -36,14 +36,6 @@ src/
 requirements.txt
 ```
 
-## Installation
-
-```
-python -m venv .venv
-source .venv/bin/activate        # Windows : .venv\Scripts\activate
-pip install -r requirements.txt
-```
-
 Télécharger le dataset Kaggle et déposer les CSV dans `data/raw/` (par exemple `data/raw/races.csv`, `data/raw/results.csv`). Les fichiers bruts ne sont pas versionnés et ne doivent jamais être modifiés.
 
 ## Lancer le nettoyage
