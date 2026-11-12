@@ -2,7 +2,7 @@ import html
 import pandas as pd
 
 def clean_drivers():
- drivers=pd.read_csv("Data/Raw/drivers.csv",na_values=r"\N")
+ drivers=pd.read_csv("data/raw/drivers.csv",na_values=r"\N")
 
 
  drivers=drivers.rename(columns={
@@ -29,7 +29,7 @@ def clean_drivers():
 
  assert drivers["driver_id"].is_unique
 
- drivers.to_csv("Data/Clean/drivers_clean.csv", index=False)
+ drivers.to_csv("data/clean/drivers_clean.csv", index=False)
 
 if __name__=="__main__":
     clean_drivers()
