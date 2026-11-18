@@ -16,7 +16,7 @@ DNS_cases = [
 ]
 
 df["grid_position"]=df["grid"].astype("Float64")
-max_grid = df.groupby("race_id")["grid"].transform(max)
+max_grid = df.groupby("race_id")["grid"].transform("max")
 df.loc[df["grid"]==0, "grid_position"] = max_grid + 1
 for race_id , driver_id in DNS_cases:
     mask= ((df["race_id"]==race_id) & (df["driver_id"] == driver_id))
