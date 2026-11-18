@@ -15,13 +15,14 @@ df["prev_podium"]=df.groupby("driver_id")["is_podium"].shift(1)
 df["driver_avg_position_last_5"]=df.groupby("driver_id")["prev_position"].transform(
     lambda s: s.rolling(5, min_periods=1).mean()
 )
-df["driver_top_3_rate_last_5"]=df.groupby("driver_id")["is_podium"].transform(
+df["driver_top_3_rate_last_5"]=df.groupby("driver_id")["prev_podium"].transform(
     lambda s:s.rolling(5, min_periods=1).mean()
 )
 
 df=df.drop(columns=["is_podium","prev_position","prev_podium"])
 first_races = df.groupby("driver_id").head(1)
 assert first_races["driver_avg_position_last_5"].isna().all()
+assert first_races["driver_top_3_rate_last_5"].isna().all()
 assert df["driver_top_3_rate_last_5"].dropna().between(0,1).all()
 
 print("Missing values: \n", df[["driver_avg_position_last_5","driver_top_3_rate_last_5"]].isna().sum())
