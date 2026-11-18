@@ -124,4 +124,4 @@ cols = [
     "race_id", "driver_id",
     "grid_position", "driver_p1_starts", "driver_dnf_rate"
 ]
-df[cols].to_csv("data/features/grid_features.csv", index=False)
+df[cols].to_csv("data/processed/grid_features.csv", index=False)
