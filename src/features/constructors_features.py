@@ -63,8 +63,6 @@ def calculer_mechanical_dnf_last5(df_constructors, constructorid, race_order):
         (df_constructors["constructor_id"] == constructorid)
         & (df_constructors["race_order"] < race_order)
     ]
-    if previous.empty:
-        return 0.0
     last5 = (
         previous["race_order"]
         .drop_duplicates()
@@ -83,8 +81,6 @@ def calculer_avg_last5(df_constructors, constructorid, race_order):
         (df_constructors["constructor_id"] == constructorid) &
         (df_constructors["race_order"] < race_order)
     ]
-    if previous.empty:
-        return 10.0
     last5 = (
         previous["race_order"]
         .drop_duplicates()
@@ -102,8 +98,6 @@ def calculer_top3_last5(df_constructors, constructorid, race_order):
         (df_constructors["constructor_id"] == constructorid) &
         (df_constructors["race_order"] < race_order)
     ]
-    if previous.empty:
-        return 0.0
     last5 = (
         previous["race_order"]
         .drop_duplicates()

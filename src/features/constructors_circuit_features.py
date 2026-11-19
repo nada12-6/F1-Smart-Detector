@@ -7,8 +7,6 @@ def calculer_circuit_avg_position(df_constructors, constructorid, circuitid, rac
         (df_constructors["constructor_id"] == constructorid) &
         (df_constructors["circuit_id"] == circuitid) &
         (df_constructors["race_order"] < race_order)]
-    if previous.empty:
-        return 10.0
     return previous["position_order"].mean()
 
 
@@ -19,8 +17,6 @@ def calculer_circuit_top3_rate(df_constructors, constructorid, circuitid, race_o
         (df_constructors["race_order"] < race_order)
     ]
 
-    if previous.empty:
-        return 0.0
     return (previous["position_order"] <= 3).mean()
 
 
