@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 
 df = pd.read_csv("data/processed/f1_merged_2014.csv")
+df = df.sort_values(["driver_id", "race_order"]).copy()
+
 
 #feature 1: grid_position
 # Les 7 non-partants identifiés
@@ -16,37 +18,36 @@ DNS_cases = [
 ]
 
 df["grid_position"]=df["grid"].astype("Float64")
+df["is_dns"] = False
+
 max_grid = df.groupby("race_id")["grid"].transform("max")
 df.loc[df["grid"]==0, "grid_position"] = max_grid + 1
+
 for race_id , driver_id in DNS_cases:
     mask= ((df["race_id"]==race_id) & (df["driver_id"] == driver_id))
-    df.loc[mask,"grid_position"] = pd.NA
+    df.loc[mask,"is_dns"] = True
 
+df.loc[df["is_dns"],"grid_position"] = pd.NA
 
 #feature 2 : driver_p1_starts
 
-df = df.sort_values(["driver_id", "race_order"])
-df["driver_p1_starts"] = (df["grid"]==1).astype("int")
-df["driver_p1_starts"] =(df.groupby("driver_id")["driver_p1_starts"].transform(lambda x : x.cumsum().shift(1).fillna(0)).astype("int"))
+df["is_starter"] = 1
+df.loc[df["position_text"] == "W", "is_starter"] = 0
+df.loc[df["is_dns"] , "is_starter"] =0
+
+df["is_p1_starts"] = ((df["grid"]==1) & (df["is_starter"] == 1)).astype("int")
+df["driver_p1_starts"] =(df.groupby("driver_id")["is_p1_starts"].transform(lambda x : x.cumsum().shift(1).fillna(0)).astype("int"))
 
 #feature 3 : driver_dnf_rate
 
-# 1. Trier les courses chronologiquement
-df = df.sort_values(["driver_id", "race_order"]).copy()
-
 # 2. Initialiser les colonnes
-df["is_starter"] = 1
+#df["is_starter"] = 1
 df["is_dnf"] = pd.NA
 
 # 3. Identifier les non-partants
 # W = retrait avant le départ dans nos données
-df.loc[df["position_text"] == "W", "is_starter"] = 0
+#df.loc[df["position_text"] == "W", "is_starter"] = 0
 
-# Cas particulier : Räikkönen, Malaisie 2017
-df.loc[
-    (df["race_id"] == 983) & (df["driver_id"] == 8),
-    "is_starter"
-] = 0
 
 # 4. Pilotes ayant terminé la course
 finished = (
@@ -88,7 +89,6 @@ df.loc[
 df.loc[df["is_starter"] == 0, "is_dnf"] = pd.NA
 
 # 9. Convertir les types
-df["is_starter"] = df["is_starter"].astype(int)
 df["is_dnf"] = df["is_dnf"].astype("Int64")
 
 # 10. Cumuls des départs précédents
@@ -104,18 +104,40 @@ df["previous_dnfs"] = (
 )
 
 # 12. Calculer le taux de DNF
-df["driver_dnf_rate"] = np.where(
-    df["previous_starts"] > 0,
-    df["previous_dnfs"] / df["previous_starts"],
-    0
+df["driver_dnf_rate"] = (
+    df["previous_dnfs"] / df["previous_starts"].replace(0,np.nan)
 )
+
+print("Valeurs manquantes :")
+print(
+    df[
+        ["grid_position", "driver_p1_starts", "driver_dnf_rate"]
+    ].isna().sum()
+)
+
+print("\nNombre de non-partants identifiés :")
+print((df["is_starter"] == 0).sum())
+
+print("\nVérification du DNF rate :")
+print(
+    df["driver_dnf_rate"].dropna().between(0, 1).all()
+)
+
+assert not df.duplicated(["race_id", "driver_id"]).any()
+
+assert (
+    df["driver_dnf_rate"].isna().sum()
+    == (df["previous_starts"] == 0).sum()
+)
+
 
 df = df.drop(
     columns=[
         "is_starter",
         "is_dnf",
         "previous_starts",
-        "previous_dnfs"
+        "previous_dnfs",
+        "is_p1_starts"
     ]
 )
 
